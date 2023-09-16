@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+
+		<!-- Data -->
+		<script src="./data/active_word_list.js"></script>
+	</head>
+	<body>
+		<h1>Hello World</h1>
+		<br />
+		<hr />
+		<br />
+
+		<div id="data-container"></div>
+
+		<script>
+			// Filtering data Stuff
+			let searchKeyword = "";
+
+			function isMatch(item, term) {
+				if (item.passive_word.toLowerCase().includes(term)) {
+					return true;
+				}
+
+                let lowerCaseActiveWords = item.active_words.map(word => word.toLowerCase());
+
+                if (lowerCaseActiveWords.some((word) => word.includes(term))) {
+					return true;
+				}
+
+				return false;
+			}
+
+            let filteredArray = activeWorldList.filter(item => isMatch(item, searchKeyword));
+
+			// UI Stuff
+			const dataContainer = document.getElementById("data-container");
+
+			for (let wordObject of filteredArray) {
+				let wordContainer = document.createElement("div");
+                let activeWordContainer = document.createElement("div");
+                
+                let passiveWordLabel = `${wordObject.passive_word}`
+                let activeWordOptions = ``;
+
+                for (let activeWord of wordObject.active_words){
+                    activeWordOptions += `${activeWord} <br>`;
+                }
+                
+				wordContainer.innerHTML = passiveWordLabel + "<hr>" + activeWordOptions;
+
+				dataContainer.appendChild(wordContainer);
+			}
+		</script>
+	</body>
+</html>
