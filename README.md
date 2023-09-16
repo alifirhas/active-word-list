@@ -1,6 +1,6 @@
 # Active Word List
 
-<!-- [Live Demo]() -->
+[Live Demo](https://alifirhas.github.io/active-word-list/)
 
 This is a search dictionary designed for exploring active words corresponding to passive words and vice versa. Its primary purpose is to assist me in honing my writing skills, but you're welcome to utilize it as well.
 
