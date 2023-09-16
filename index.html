@@ -1,20 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="cupcake">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Document</title>
 
+		<!-- Tailwind CSS -->
+		<link href="./dist/output.css" rel="stylesheet" />
+
 		<!-- Data -->
 		<script src="./data/active_word_list.js"></script>
 	</head>
 	<body>
-		<h1>Hello World</h1>
-		<br />
-		<hr />
-		<br />
+		<div class="container p-4 mx-auto h-screen">
+			<h1>Hello World</h1>
 
-		<div id="data-container"></div>
+			<hr>
+
+			<div id="data-container"></div>
+		</div>
 
 		<script>
 			// Filtering data Stuff
@@ -25,31 +29,35 @@
 					return true;
 				}
 
-                let lowerCaseActiveWords = item.active_words.map(word => word.toLowerCase());
+				let lowerCaseActiveWords = item.active_words.map((word) =>
+					word.toLowerCase()
+				);
 
-                if (lowerCaseActiveWords.some((word) => word.includes(term))) {
+				if (lowerCaseActiveWords.some((word) => word.includes(term))) {
 					return true;
 				}
 
 				return false;
 			}
 
-            let filteredArray = activeWorldList.filter(item => isMatch(item, searchKeyword));
+			let filteredArray = activeWorldList.filter((item) =>
+				isMatch(item, searchKeyword)
+			);
 
 			// UI Stuff
 			const dataContainer = document.getElementById("data-container");
 
 			for (let wordObject of filteredArray) {
 				let wordContainer = document.createElement("div");
-                let activeWordContainer = document.createElement("div");
-                
-                let passiveWordLabel = `${wordObject.passive_word}`
-                let activeWordOptions = ``;
+				let activeWordContainer = document.createElement("div");
 
-                for (let activeWord of wordObject.active_words){
-                    activeWordOptions += `${activeWord} <br>`;
-                }
-                
+				let passiveWordLabel = `${wordObject.passive_word}`;
+				let activeWordOptions = ``;
+
+				for (let activeWord of wordObject.active_words) {
+					activeWordOptions += `${activeWord} <br>`;
+				}
+
 				wordContainer.innerHTML = passiveWordLabel + "<hr>" + activeWordOptions;
 
 				dataContainer.appendChild(wordContainer);
