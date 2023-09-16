@@ -11,28 +11,53 @@
 		<!-- Data -->
 		<script src="./data/active_word_list.js"></script>
 	</head>
-	<body>
+	<body onload="search()">
 		<div class="container p-4 mx-auto h-screen">
-			<h1>Hello World</h1>
+			<!-- Label and search input -->
+			<div class="flex items-center flex-col">
+				<!-- Label -->
+				<h1 class="mb-4">Active Word List</h1>
 
-			<hr>
+				<!-- Search input -->
+				<input
+					type="search"
+					placeholder="type here..."
+					id="search-keyword"
+					class="input input-bordered w-full max-w-xs"
+					autofocus
+					oninput="search()"
+				/>
+			</div>
 
-			<div id="data-container"></div>
+			<!-- Divider -->
+			<div class="w-full my-4">
+				<hr />
+			</div>
+
+			<!-- Passive word card with list of active word -->
+			<div id="data-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+				<!-- <div class="card bg-base-200 shadow-sm">
+					<div class="card-body">
+						<h2 class="card-title">Card title!</h2>
+						<p>one, two, three, four</p>
+					</div>
+				</div> -->
+			</div>
 		</div>
 
 		<script>
-			// Filtering data Stuff
-			let searchKeyword = "";
-
+			// Filtering data
 			function isMatch(item, term) {
+				// Filter data on passive_word
 				if (item.passive_word.toLowerCase().includes(term)) {
 					return true;
 				}
 
 				let lowerCaseActiveWords = item.active_words.map((word) =>
-					word.toLowerCase()
+				word.toLowerCase()
 				);
-
+				
+				// Filter data on active_words item
 				if (lowerCaseActiveWords.some((word) => word.includes(term))) {
 					return true;
 				}
@@ -40,27 +65,38 @@
 				return false;
 			}
 
-			let filteredArray = activeWorldList.filter((item) =>
-				isMatch(item, searchKeyword)
-			);
+			// UI
+			function search() {
+				// Get search keyword
+				let searchKeyword = document
+					.getElementById("search-keyword")
+					.value.toLowerCase();
 
-			// UI Stuff
-			const dataContainer = document.getElementById("data-container");
+				// Filter active_word_list
+				let filteredArray = activeWorldList.filter((item) =>
+					isMatch(item, searchKeyword)
+				);
 
-			for (let wordObject of filteredArray) {
-				let wordContainer = document.createElement("div");
-				let activeWordContainer = document.createElement("div");
+				// Make the container
+				const dataContainer = document.getElementById("data-container");
+				dataContainer.innerHTML = ""; // Reset container item every search
 
-				let passiveWordLabel = `${wordObject.passive_word}`;
-				let activeWordOptions = ``;
+				// Show the result
+				for (let wordObject of filteredArray) {
+					let wordContainer = document.createElement("div");
+					let activeWordContainer = document.createElement("div");
 
-				for (let activeWord of wordObject.active_words) {
-					activeWordOptions += `${activeWord} <br>`;
+					let passiveWordLabel = `${wordObject.passive_word}`;
+					let activeWordOptions = wordObject.active_words.join(", ");
+
+					wordContainer.innerHTML = `<div class='card bg-base-200 shadow-sm'>
+						<div class='card-body'>
+						<h2 class='card-title'>${passiveWordLabel}</h2>
+						<p>${activeWordOptions}</p></div>
+					</div>`;
+
+					dataContainer.appendChild(wordContainer);
 				}
-
-				wordContainer.innerHTML = passiveWordLabel + "<hr>" + activeWordOptions;
-
-				dataContainer.appendChild(wordContainer);
 			}
 		</script>
 	</body>
